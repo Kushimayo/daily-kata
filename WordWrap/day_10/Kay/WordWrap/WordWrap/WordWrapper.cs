@@ -25,9 +25,9 @@ namespace WordWrap
                 {
                     int one_word_size = 0;
                     if (post_space_index == -1)
-                        one_word_size = word.Length - prev_space_index;
+                        one_word_size = word.Length - (prev_space_index + 1);
                     else
-                        one_word_size = col_size - prev_space_index + post_space_index;
+                        one_word_size = col_size - (prev_space_index + 1) + post_space_index;
 
                     if (one_word_size > col_size)
                         result += doWrap(word, col_size, col_size, 0);
