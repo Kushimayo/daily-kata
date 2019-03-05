@@ -1,20 +1,11 @@
-# daily-kata
+# Bowling Kata
 
-매일 30분씩 코딩 훈련 ( 30 minutes every day coding training!)
+문제 및 문제 풀이
 
-## 첫번째 문제(First coding training question) - WorkWrap
+* http://butunclebob.com/files/downloads/Bowling%20Game%20Kata.ppt
 
-* https://www.codewars.com/kata/word-wrap-1
+단계1. 문제 보고 직접 풀어보기(문제 풀이 보지 않고)
 
-### Day 1
+단계2. 문제 풀이보고 그대로 따라해보기
 
-개발 환경을 세팅하고 프로젝트를 생성해 봅시다.
-
-Setting up the development environment and create the console application and unit test in visual studio 2017
-
-* Visual Studio 2017 설치(Install Visual Studio 2017)
-* 다음의 프로젝트 생성되는지 체크 (Check to be sure you can create the following project templates)
-  * Visual C# Console App(.NET Framework)
-  * Visual C# Unit Test Project(.NET Framework)
-* git 클론하기(Clone the repository with the following command)
-  * git clone https://github.com/cjhnim/daily-kata.git
+단계3. 문제 풀이에서 배운 것을 가지고 다시 풀어보기
