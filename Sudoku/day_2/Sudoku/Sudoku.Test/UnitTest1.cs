@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace Sudoku.Test
@@ -135,5 +136,106 @@ namespace Sudoku.Test
             int[,] solvedResult = sudoku.Solve(quiz);
             Assert.AreEqual(true, sudoku.Validate(solvedResult));
         }
+
+        [TestMethod]
+        public void 별2개난이도문제를_풀이할수있다()
+        {
+            int[,] quiz = new int[9, 9]
+            {{4, 3, 5,  0, 6, 1,  0, 7, 0},
+            {7, 6, 0,  0, 0, 0,  3, 0, 0},
+            {0, 0, 0,  0, 0, 0,  0, 4, 0},
+
+            {0, 0, 0,  8, 0, 0,  0, 0, 3},
+            {3, 0, 0,  5, 7, 9,  0, 0, 4},
+            {8, 0, 0,  0, 0, 4,  0, 0, 0},
+
+            {0, 8, 0,  0, 0, 0,  0, 0, 0},
+            {0, 0, 1,  0, 0, 0,  0, 9, 7},
+            {0, 9, 0,  7, 4, 0,  5, 6, 1}};
+            int[,] solvedResult = sudoku.Solve(quiz);
+            Assert.AreEqual(true, sudoku.Validate(solvedResult));
+        }
+
+        [TestMethod]
+        public void 별3개난이도문제를_풀이할수있다()
+        {
+            int[,] quiz = new int[9, 9]
+            {{7, 0, 0,  0, 0, 9,  3, 4, 8},
+            {0, 0, 0,  0, 4, 0,  0, 1, 0},
+            {0, 0, 0,  5, 0, 0,  0, 0, 0},
+
+            {9, 1, 0,  4, 0, 0,  0, 7, 0},
+            {6, 0, 0,  9, 0, 3,  0, 0, 1},
+            {0, 3, 0,  0, 0, 1,  0, 2, 9},
+
+            {0, 0, 0,  0, 0, 5,  0, 0, 0},
+            {0, 8, 0,  0, 1, 0,  0, 0, 0},
+            {4, 9, 3,  8, 0, 0,  0, 0, 2}};
+            int[,] solvedResult = sudoku.Solve(quiz);
+            Assert.AreEqual(true, sudoku.Validate(solvedResult));
+        }
+
+        [TestMethod]
+        public void 별5개난이도문제를_풀이할수있다()
+        {
+            int[,] quiz = new int[9, 9]
+            {{0, 0, 3,  9, 0, 2,  0, 5, 0},
+            {0, 0, 0,  0, 6, 0,  3, 0, 0},
+            {0, 0, 0,  3, 0, 0,  0, 0, 4},
+
+            {0, 6, 7,  0, 0, 0,  5, 9, 0},
+            {5, 0, 4,  0, 9, 0,  1, 0, 3},
+            {0, 8, 9,  0, 0, 0,  7, 4, 0},
+
+            {4, 0, 0,  0, 0, 7,  0, 0, 0},
+            {0, 0, 5,  0, 2, 0,  0, 0, 0},
+            {0, 3, 0,  6, 0, 1,  4, 0, 0}};
+            int[,] solvedResult = sudoku.Solve(quiz);
+            Assert.AreEqual(true, sudoku.Validate(solvedResult));
+        }
+
+        [TestMethod]
+        public void 난이도2010_어려움_문제를_풀이할수있다()
+        {
+            int[,] quiz = new int[9, 9]
+            {{0, 0, 5,  3, 0, 0,  0, 0, 0},
+            {8, 0, 0,  0, 0, 0,  0, 2, 0},
+            {0, 7, 0,  0, 1, 0,  5, 0, 0},
+
+            {4, 0, 0,  0, 0, 5,  3, 0, 0},
+            {0, 1, 0,  0, 7, 0,  0, 0, 6},
+            {0, 0, 3,  2, 0, 0,  0, 8, 0},
+
+            {0, 6, 0,  5, 0, 0,  0, 0, 9},
+            {0, 0, 4,  0, 0, 0,  0, 3, 0},
+            {0, 0, 0,  0, 0, 9,  7, 0, 0}};
+            int[,] solvedResult = sudoku.Solve(quiz);
+            Assert.AreEqual(true, sudoku.Validate(solvedResult));
+        }
+
+        [TestMethod]
+        public void Array사용법()
+        {
+            ArrayList array = new ArrayList();
+            array.Add(10);
+            array.Add(15);
+            array.Add(20);
+
+            Assert.IsTrue(array.Contains(15));
+        }
+
+        //[TestMethod]
+        //public void Array사용법2()
+        //{
+        //    Array array = new Array();
+        //    array.Add(10);
+        //    array.Add(15);
+        //    array.Add(20);
+        //    IEnumerator enumerator = array.GetEnumerator();
+        //    for (enumerator.Current.)
+        //        enumerator.Equals(10)
+
+        //    Assert.IsTrue(array.Contains(15));
+        //}
     }
 }

@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections;
 
 namespace Sudoku
 {
     public class SudokuGame
     {
         private int[] remainNumber;
+        private ArrayList rollbackQuiz = new ArrayList();
+        private ArrayList rollbackRemain = new ArrayList();
+        private ArrayList possibleInsertIndex = new ArrayList();
         public SudokuGame()
         {
         }
@@ -116,6 +120,36 @@ namespace Sudoku
 
             return false;
         }
+        private int[,] RollbackQuiz()
+        {
+            int index = 1;
+            int[,] result = new int[9,9] ;
+            foreach (int[,] item in rollbackQuiz)
+            {
+                if (index == rollbackQuiz.Count)
+                {
+                    result = (int[,])item.Clone();
+                }
+                index++;
+            }
+
+            return result;
+        }
+
+        private int[] RollbackRemain()
+        {
+            int index = 1;
+            int[] result = new int[9];
+            foreach (int[] remain in rollbackRemain)
+            {
+                if (index == rollbackRemain.Count)
+                {
+                    result = (int[])remain.Clone();
+                }
+                index++;
+            }
+            return result;
+        }
 
         public int[,] Solve(int[,] quiz)
         {
@@ -125,13 +159,59 @@ namespace Sudoku
             while (true)
             {
                 i++;
+                bool isError = false;
                 int[,] preResult = (int[,])result.Clone();
-                result = InsertPossibleNumber(result);
-                if (IsNotChange(preResult, result))
-                    break;
+                result = SolveThreeWay(result, ref isError);
+
+                if (isError)
+                {
+                    result = RollbackQuiz();
+                    remainNumber = RollbackRemain();
+                    result = InsertPossibleNumber(result);
+                }
+                else
+                {
+                    if (IsNotChange(preResult, result))
+                    {
+                        if (IsCompleteQuiz())
+                            break;
+                        // 여기서 뎁스 내려가면서 숫자 넣어줌
+                        rollbackQuiz.Add(preResult);
+                        rollbackRemain.Add(remainNumber.Clone());
+                        possibleInsertIndex.Add(0);
+                        result = InsertPossibleNumber(result);
+                    }
+                }
             }
             
             return result;
+        }
+
+        private int[,] SolveThreeWay(int[,] quiz, ref bool isError)
+        {
+            int[,] result = quiz;
+            result = InsertSolvedNumberWithSmallMatrix(result, ref isError);
+            if (isError == true)
+                return result;
+            result = InsertSolvedNumberWithRow(result, ref isError);
+            if (isError == true)
+                return result;
+            result = InsertSolvedNumberWithColumn(result, ref isError);
+            if (isError == true)
+                return result;
+
+            return result;
+        }
+
+        private bool IsCompleteQuiz()
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (remainNumber[i] > 0)
+                    return false;
+            }
+
+            return true;
         }
 
         private bool IsNotChange(int[,] preMatrix, int[,] postMatrix)
@@ -167,6 +247,184 @@ namespace Sudoku
         private int[,] InsertPossibleNumber(int[,] quiz)
         {
             int[,] result = quiz;
+            for (int i = 0; i < 9; i++)
+            {
+                for (int x = 0; x < 9; x++)
+                {
+                    if (remainNumber[x] == 0 || IsNumberAlreadyExistWithRow(result, i, x + 1))
+                        continue;
+                    bool[] canInsert = new bool[9] { false, false, false, false, false, false, false, false, false };
+                    for (int j = 0; j < 9; j++)
+                    {
+                        canInsert[j] = IsCanInsert(result, i, j, x + 1);
+                    }
+
+                    for (int a = 0; a < 9; a++)
+                    {
+                        if (canInsert[a])
+                        {
+                            if (IsTriedNumber(i, a, x))
+                                continue;
+                            result[i, a] = x + 1;
+                            remainNumber[x]--;
+                            int value = (i * 100) + (a * 10) + x + 1;
+                            possibleInsertIndex.Add(value);
+                            return result;
+                        }
+                    }
+                    if (CanInsertButAllTriedNumber(canInsert))
+                    {
+                        rollbackQuiz.RemoveAt(rollbackQuiz.Count - 1);
+                        rollbackRemain.RemoveAt(rollbackRemain.Count - 1);
+                        result = RollbackQuiz();
+                        remainNumber = RollbackRemain();
+                        RemoveUselessPossibleInsert();
+
+                        return result;
+                    }
+                }
+            }
+            return result;
+        }
+
+        private void RemoveUselessPossibleInsert()
+        {
+            int lastIndex = possibleInsertIndex.LastIndexOf(0);
+            possibleInsertIndex.RemoveRange(lastIndex, possibleInsertIndex.Count - lastIndex);
+        }
+
+        private bool CanInsertButAllTriedNumber(bool[] canInsert)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (canInsert[i])
+                    return true;
+            }
+            return false;
+        }
+
+        private bool IsTriedNumber(int row, int column, int value)
+        {
+            int number = (100 * row) + (10 * column) + value + 1;
+            return possibleInsertIndex.Contains(number);
+        }
+
+        private bool IsCanInsert(int[,] quiz, int baseRow, int baseCol, int number)
+        {
+            if (quiz[baseRow, baseCol] == 0)
+            {
+                int tempRow = (baseRow / 3) * 3;
+                int tempColumn = (baseCol / 3) * 3;
+                int tempRowOffset = baseRow % 3;
+                int tempColumnOffset = baseCol % 3;
+                if (canInsertNumber(quiz, tempRow, tempColumn, tempRowOffset, tempColumnOffset, number))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private int[,] InsertSolvedNumberWithRow(int[,] quiz, ref bool isError)
+        {
+            int[,] result = quiz;
+            for (int i = 0; i < 9; i++)
+            {
+                for (int x = 0; x < 9; x++)
+                {
+                    if (remainNumber[x] == 0 || IsNumberAlreadyExistWithRow(result, i, x + 1))
+                        continue;
+                    bool[] canInsert = new bool[9] { false, false, false, false, false, false, false, false, false };
+                    for (int j = 0; j < 9; j++)
+                    {
+                        canInsert[j] = IsCanInsert(result, i, j, x + 1);
+                    }
+
+                    if (IsOnlyOneSpotInsert(canInsert))
+                    {
+                        for (int a = 0; a < 9; a++)
+                        {
+                            if (canInsert[a])
+                            {
+                                result[i, a] = x + 1;
+                                remainNumber[x]--;
+                            }
+                        }
+                    } else if (IsCanNotInsertAnySpot(canInsert))
+                    {
+                        isError = true;
+                        return result;
+                    }
+                }
+            }
+            return result;
+        }
+
+        private bool IsCanNotInsertAnySpot(bool[] possibleArray)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (possibleArray[i] == true)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private bool IsCanNotInsertAnySpot(bool[,] possibleMatrix)
+        {
+            for (int i = 0; i < 3; i++)
+            {
+                for (int j = 0; j < 3; j++)
+                {
+                    if (possibleMatrix[i, j]) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        private int[,] InsertSolvedNumberWithColumn(int[,] quiz, ref bool isError)
+        {
+            int[,] result = quiz;
+            for (int i = 0; i < 9; i++)
+            {
+                for (int x = 0; x < 9; x++)
+                {
+                    if (remainNumber[x] == 0 || IsNumberAlreadyExistWithColumn(result, i, x + 1))
+                        continue;
+                    bool[] canInsert = new bool[9] { false, false, false, false, false, false, false, false, false };
+                    for (int j = 0; j < 9; j++)
+                    {
+                        canInsert[j] = IsCanInsert(result, j, i, x + 1);
+                    }
+
+                    if (IsOnlyOneSpotInsert(canInsert))
+                    {
+                        for (int a = 0; a < 9; a++)
+                        {
+                            if (canInsert[a])
+                            {
+                                result[a, i] = x + 1;
+                                remainNumber[x]--;
+                            }
+                        }
+                    }
+                    else if (IsCanNotInsertAnySpot(canInsert))
+                    {
+                        isError = true;
+                        return result;
+                    }
+                }
+            }
+            return result;
+        }
+
+        private int[,] InsertSolvedNumberWithSmallMatrix(int[,] quiz, ref bool isError)
+        {
+            int[,] result = quiz;
             for (int i = 0; i < 3; i++)
             {
                 for (int j = 0; j < 3; j++)
@@ -175,7 +433,7 @@ namespace Sudoku
                     int tempColumn = j * 3;
                     for (int x = 0; x < 9; x++)
                     {
-                        if (remainNumber[x] == 0)
+                        if (remainNumber[x] == 0 || IsNumberAlreadyExistWithSmallMatrix(result, tempRow, tempColumn, x + 1))
                             continue;
                         bool[,] canInsert = new bool[3, 3] { { false, false, false }, { false, false, false }, { false, false, false } };
                         for (int y = 0; y < 3; y++)
@@ -206,10 +464,46 @@ namespace Sudoku
                                 }
                             }
                         }
+                        else if (IsCanNotInsertAnySpot(canInsert))
+                        {
+                            isError = true;
+                            return result;
+                        }
                     }
                 }
             }
             return result;
+        }
+
+        private bool IsNumberAlreadyExistWithSmallMatrix(int[,] quiz, int row, int column, int number)
+        {
+            int[] smallMetrix = GetSmallMatrixArray(quiz, row, column);
+            for ( int i = 0; i < 9; i++)
+            {
+                if (smallMetrix[i] == number)
+                    return true;
+            }
+            return false;
+        }
+
+        private bool IsNumberAlreadyExistWithColumn(int[,] quiz, int column, int number)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (quiz[i, column] == number)
+                    return true;
+            }
+            return false;
+        }
+
+        private bool IsNumberAlreadyExistWithRow(int[,] quiz, int row, int number)
+        {
+            for (int i = 0; i < 9; i++)
+            {
+                if (quiz[row, i] == number)
+                    return true;
+            }
+            return false;
         }
 
         private bool IsOnlyOneSpotInsert(bool[,] possibleMatrix)
@@ -224,6 +518,22 @@ namespace Sudoku
                         matchCount++;
                 }
             }
+            if (matchCount == 1)
+                result = true;
+
+            return result;
+        }
+
+        private bool IsOnlyOneSpotInsert(bool[] possibleArray)
+        {
+            bool result = false;
+            int matchCount = 0;
+            for (int i = 0; i < 9; i++)
+            {
+                if (possibleArray[i])
+                    matchCount++;
+            }
+
             if (matchCount == 1)
                 result = true;
 
