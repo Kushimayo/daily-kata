@@ -167,7 +167,7 @@ namespace Sudoku
                 {
                     result = RollbackQuiz();
                     remainNumber = RollbackRemain();
-                    result = InsertPossibleNumber(result);
+                    result = InsertPossibleNumberV2(result);
                 }
                 else
                 {
@@ -179,7 +179,7 @@ namespace Sudoku
                         rollbackQuiz.Add(preResult);
                         rollbackRemain.Add(remainNumber.Clone());
                         possibleInsertIndex.Add(0);
-                        result = InsertPossibleNumber(result);
+                        result = InsertPossibleNumberV2(result);
                     }
                 }
             }
@@ -242,6 +242,71 @@ namespace Sudoku
                     quiz[row + 2, column],
                     quiz[row + 2, column + 1],
                     quiz[row + 2, column + 2] };
+        }
+
+        private int[,] InsertPossibleNumberV2(int[,] quiz)
+        {
+            int[,] result = quiz;
+            int possibleRow = 0;
+            bool[] possibleColumn = new bool[9];
+            int possibleNumber = 0;
+            int minCount = 10;
+            bool serchFlag = true;
+            for (int i = 0; i < 9; i++)
+            {
+                for (int x = 0; x < 9; x++)
+                {
+                    if (remainNumber[x] == 0 || IsNumberAlreadyExistWithRow(result, i, x + 1))
+                        continue;
+                    bool[] canInsert = new bool[9] { false, false, false, false, false, false, false, false, false };
+                    int canInsertCount = 0;
+                    for (int j = 0; j < 9; j++)
+                    {
+                        canInsert[j] = IsCanInsert(result, i, j, x + 1);
+                        if (canInsert[j])
+                            canInsertCount++;
+                    }
+                    if (minCount > canInsertCount)
+                    {
+                        minCount = canInsertCount;
+                        possibleRow = i;
+                        possibleColumn = (bool[])canInsert.Clone();
+                        possibleNumber = x;
+                    }
+                    if (minCount <= 2)
+                    {
+                        serchFlag = false;
+                        break;
+                    }
+                }
+
+                if (!serchFlag)
+                    break;
+            }
+            for (int a = 0; a < 9; a++)
+            {
+                if (possibleColumn[a])
+                {
+                    if (IsTriedNumber(possibleRow, a, possibleNumber))
+                        continue;
+                    result[possibleRow, a] = possibleNumber + 1;
+                    remainNumber[possibleNumber]--;
+                    int value = (possibleRow * 100) + (a * 10) + possibleNumber + 1;
+                    possibleInsertIndex.Add(value);
+                    return result;
+                }
+            }
+            if (CanInsertButAllTriedNumber(possibleColumn))
+            {
+                rollbackQuiz.RemoveAt(rollbackQuiz.Count - 1);
+                rollbackRemain.RemoveAt(rollbackRemain.Count - 1);
+                result = RollbackQuiz();
+                remainNumber = RollbackRemain();
+                RemoveUselessPossibleInsert();
+
+                return result;
+            }
+            return result;
         }
 
         private int[,] InsertPossibleNumber(int[,] quiz)
