@@ -194,24 +194,24 @@ namespace Sudoku.Test
             Assert.AreEqual(true, sudoku.Validate(solvedResult));
         }
 
-        [TestMethod]
-        public void 난이도2010_어려움_문제를_풀이할수있다()
-        {
-            int[,] quiz = new int[9, 9]
-            {{0, 0, 5,  3, 0, 0,  0, 0, 0},
-            {8, 0, 0,  0, 0, 0,  0, 2, 0},
-            {0, 7, 0,  0, 1, 0,  5, 0, 0},
+        //[TestMethod]
+        //public void 난이도2010_어려움_문제를_풀이할수있다()
+        //{
+        //    int[,] quiz = new int[9, 9]
+        //    {{0, 0, 5,  3, 0, 0,  0, 0, 0},
+        //    {8, 0, 0,  0, 0, 0,  0, 2, 0},
+        //    {0, 7, 0,  0, 1, 0,  5, 0, 0},
 
-            {4, 0, 0,  0, 0, 5,  3, 0, 0},
-            {0, 1, 0,  0, 7, 0,  0, 0, 6},
-            {0, 0, 3,  2, 0, 0,  0, 8, 0},
+        //    {4, 0, 0,  0, 0, 5,  3, 0, 0},
+        //    {0, 1, 0,  0, 7, 0,  0, 0, 6},
+        //    {0, 0, 3,  2, 0, 0,  0, 8, 0},
 
-            {0, 6, 0,  5, 0, 0,  0, 0, 9},
-            {0, 0, 4,  0, 0, 0,  0, 3, 0},
-            {0, 0, 0,  0, 0, 9,  7, 0, 0}};
-            int[,] solvedResult = sudoku.Solve(quiz);
-            Assert.AreEqual(true, sudoku.Validate(solvedResult));
-        }
+        //    {0, 6, 0,  5, 0, 0,  0, 0, 9},
+        //    {0, 0, 4,  0, 0, 0,  0, 3, 0},
+        //    {0, 0, 0,  0, 0, 9,  7, 0, 0}};
+        //    int[,] solvedResult = sudoku.Solve(quiz);
+        //    Assert.AreEqual(true, sudoku.Validate(solvedResult));
+        //}
 
         [TestMethod]
         public void Array사용법()

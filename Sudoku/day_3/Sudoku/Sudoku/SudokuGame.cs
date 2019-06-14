@@ -88,40 +88,40 @@ namespace Sudoku
             return result;
         }
 
-        private string[,] Solving(string[,] quiz, ref bool isError)
-        {
-            if (isError)
-                return quiz;
-            if (IsDone(quiz))
-                return quiz;
+        //private string[,] Solving(string[,] quiz, ref bool isError)
+        //{
+        //    if (isError)
+        //        return quiz;
+        //    if (IsDone(quiz))
+        //        return quiz;
 
-            int findMinLength = 10;
-            int tryRow = 0;
-            int tryColumn = 0;
+        //    int findMinLength = 10;
+        //    int tryRow = 0;
+        //    int tryColumn = 0;
 
-            for (int row = 0; row < 9; row++)
-            {
-                for (int column = 0; column < 9; column++)
-                {
-                    if (quiz[row, column].Length != 1 && quiz[row, column].Length < findMinLength)
-                    {
-                        findMinLength = quiz[row, column].Length;
-                        tryRow = row;
-                        tryColumn = column;
-                        if (quiz[row, column].Length == 2)
-                            break;
-                    }
-                }
-                if (quiz[tryRow, tryColumn].Length == 2)
-                    break;
-            }
+        //    for (int row = 0; row < 9; row++)
+        //    {
+        //        for (int column = 0; column < 9; column++)
+        //        {
+        //            if (quiz[row, column].Length != 1 && quiz[row, column].Length < findMinLength)
+        //            {
+        //                findMinLength = quiz[row, column].Length;
+        //                tryRow = row;
+        //                tryColumn = column;
+        //                if (quiz[row, column].Length == 2)
+        //                    break;
+        //            }
+        //        }
+        //        if (quiz[tryRow, tryColumn].Length == 2)
+        //            break;
+        //    }
 
-            string currentValue = quiz[tryRow, tryColumn];
-            for (int i = 0; i < currentValue.Length; i++)
-            {
-                string tryValue = currentValue.Substring(i, 1);
-            }
-        }
+        //    string currentValue = quiz[tryRow, tryColumn];
+        //    for (int i = 0; i < currentValue.Length; i++)
+        //    {
+        //        string tryValue = currentValue.Substring(i, 1);
+        //    }
+        //}
 
         private bool IsDone(string[,] quiz)
         {
