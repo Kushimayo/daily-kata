@@ -13,15 +13,15 @@ namespace ReqularExpression.Test
         }
 
         [TestMethod]
-        public void aa_not_match_with_just_a()
+        public void aa_not_match_with_a()
         {
-            Assert.AreEqual(false, matcher.IsMatch("aa", "a"));
+            Assert.IsFalse(matcher.IsMatch("aa", "a"));
         }
 
         [TestMethod]
-        public void aa_matched_a_string_with_star()
+        public void aa_match_with_a_star()
         {
-            Assert.AreEqual(true, matcher.IsMatch("aa", "a*"));
+            Assert.IsTrue(matcher.IsMatch("aa", "a*"));
         }
 
         [TestMethod]
