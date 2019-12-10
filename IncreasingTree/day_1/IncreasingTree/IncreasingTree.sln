@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.852
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncreasingTree", "IncreasingTree\IncreasingTree.csproj", "{68290331-5310-49A2-85F2-94D97497A7E8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IncreasingTree.Test", "IncreasingTree.Test\IncreasingTree.Test.csproj", "{77F27697-0A5D-429B-B601-76B78B155206}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{68290331-5310-49A2-85F2-94D97497A7E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68290331-5310-49A2-85F2-94D97497A7E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68290331-5310-49A2-85F2-94D97497A7E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68290331-5310-49A2-85F2-94D97497A7E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{77F27697-0A5D-429B-B601-76B78B155206}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{77F27697-0A5D-429B-B601-76B78B155206}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{77F27697-0A5D-429B-B601-76B78B155206}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{77F27697-0A5D-429B-B601-76B78B155206}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EC8E1B5C-C7BB-4772-84A4-C0545B72D9F0}
+	EndGlobalSection
+EndGlobal

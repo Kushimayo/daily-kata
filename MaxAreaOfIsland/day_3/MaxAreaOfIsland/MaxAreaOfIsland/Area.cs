@@ -2,16 +2,15 @@
 
 namespace MaxAreaOfIsland
 {
-    public class Island
+    public class Area
     {
-        public Island()
+        public Area()
         {
         }
 
         public int MaxAreaOfIsland(int[][] grid)
         {
             int maxArea = 0;
-
             for (int row = 0; row < grid.Length; row++)
             {
                 for (int col = 0; col < grid[row].Length; col++)
@@ -23,7 +22,6 @@ namespace MaxAreaOfIsland
             }
             return maxArea;
         }
-
         private int GetAreaSize(int[][] grid, int row, int col)
         {
             int areaSize = 0;
